@@ -9,6 +9,7 @@ export const List = () => {
   const [jobsOpen, setJobsOpen] = useState([]);
   const [filter, setFilter] = useState([]);
   const [clearFlag, setClearFlag] = useState(true);
+  const [display, setDisplay] = useState([]);
 
   useEffect(() => {
     fetchJobOpenings();
@@ -31,6 +32,16 @@ export const List = () => {
       });
   };
 
+  const displayJobs =() => {
+      const array = [];
+       array = filter.filter(obj => (obj['Engineering']).includes(jobsOpen))
+
+    if (array.length == 0) {
+      console.log(array.length);
+    } else
+         console.log(array.length);
+  }
+
   const getDepartmentFilterData = (jobsOpen) => {
         // needs to implement these
   }
@@ -51,7 +62,18 @@ export const List = () => {
         setClearFlag(false)
   }
 
-  const onSearch = (value) => console.log(value);
+  const onSearch = () =>{
+     let array = [];
+    array = jobsOpen.filter(obj => (obj.department.title).includes(filter)|| (obj.location.state).includes(filter)|| (obj.function.title).includes(filter))
+     setDisplay(array);
+
+ if (array.length == 0) {
+   console.log("empty");
+ } else
+       console.log(display);
+      // console.log(array);
+
+  } 
 
   // console.log(jobsOpen);
   return (
@@ -63,7 +85,8 @@ export const List = () => {
             <Search
               placeholder="input search text"
               onSearch={onSearch}
-              enterButton
+               enterButton
+              // onClick={displayJobs}
             />
           </Col>
         </Row>
