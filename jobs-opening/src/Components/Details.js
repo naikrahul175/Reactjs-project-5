@@ -6,7 +6,7 @@ export const Details = () => {
   },[])
 
   const  getJobOpeningsDeatails = () => {
-    fetch(`https://teknorix.jobsoid.com/api/v1/locations`)
+    fetch(`https://teknorix.jobsoid.com/api/v1/jobs/`)
     .then((res) => {
         if(!res.ok) {
             console.log("Error in the network");
