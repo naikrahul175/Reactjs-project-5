@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, Space, Input, Select } from "antd";
+import { Row, Col, Space, Input, Select , Layout} from "antd";
 import { BodyContent } from "./BodyContent";
 import "antd/dist/antd.css";
 
 const { Search } = Input;
 const { Option } = Select;
+const {Header, Content, Footer} = Layout;
 
 export const List = () => {
   const [jobsOpen, setJobsOpen] = useState([]);
@@ -36,8 +37,10 @@ export const List = () => {
   //handle change func
   const handleChange = (value) => {
     let result = [...filter, value];
+    console.log(result);
+    console.log(filter);
     if (result === "") {
-      setFilter([]);
+      // setFilter([]);
     } else {
       setFilter(result);
       setClearFlag(true);
@@ -49,29 +52,41 @@ export const List = () => {
   const handleClear = () => {
     setClearFlag(false);
   };
-  //search func
-  const onSearch = () => {
+
+  const removeFilter = (value) => {
+    // console.log(filter);
+      for(var i=0;i<filter.length;i++) {
+          if(filter[i] == value) {
+            filter.splice(i,1)
+           break;
+          }
+      }
+      
+  }
+         //search func
+  const onSearch = (value) => {
+    // alert(value)
     let array = [];
     array = jobsOpen.filter(
-      (obj) =>
+      (obj) => (
         obj.department.title.includes(filter) ||
-        obj.location.state.includes(filter) ||
+       obj.location.state.includes(filter) ||
         obj.function.title.includes(filter)
+      )
     );
-    setDisplay(array);
-
+   
     if (array.length == 0) {
       console.log("empty");
     } else {
       console.log(array);
+      setDisplay(array);
       //  console.log(display);
     }
   };
 
   return (
-    <div className="List">
-      <div
-        className="list-top"
+    <Layout className="List" style={{backgroundColor:'#fff'}}>
+      <div className="list-top"
         style={{ margin: 10, padding: 50, background: "#E5E4E2" }} >
         {/* <Space> */}
         <Row>
@@ -80,7 +95,6 @@ export const List = () => {
               placeholder="Search for job"
               onSearch={onSearch}
               enterButton
-              // onClick={displayJobs}
             />
           </Col>
         </Row>
@@ -95,7 +109,7 @@ export const List = () => {
               >
                 {jobsOpen?.length > 0 ? jobsOpen.map((data) => (
                       <Option key={data.id} value={data.department.title}>
-                        {data.department.title}
+                        {/* {data.department.title} */}
                       </Option>
                       // console.log(data.department);
                     ))
@@ -138,21 +152,22 @@ export const List = () => {
         </Space>
         {/* </Space> */}
       </div>
-      {filter.length > 0 ? (
+      {clearFlag && filter.length > 0 ? (
         <div
           className="list-middle"
-          style={{ marginTop: 10, padding: 20, background: "#E5E4E2" }}
+          style={{ margin: 10, padding: 20, background: "#E5E4E2" }}
         >
           <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 24 }}>
             {/* <Col className="gutter-row" span={5}> */}
-            {clearFlag && filter?.length > 0? filter.map((el, index) => (
+            {filter?.length > 0? filter.map((el, index) => (
                   <Select
                     mode="multiple"
                     allowClear
                     style={{ width: 250 }}
-                    key={index + 1}
+                    key={index+1}
                     defaultValue={el}
                     onClear={handleClear}
+                    onDeselect={removeFilter}
                   />
                 ))
               : "Select again"}
@@ -162,8 +177,9 @@ export const List = () => {
       ) : (
         ""
       )}
-      
-      {display && display.length > 0 ? <BodyContent data={display} /> : ""}
-    </div>
+      <Content >
+        {display && display.length > 0 ? <BodyContent {...display} /> : ""}
+      </Content>
+    </Layout>
   );
 };

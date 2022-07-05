@@ -1,9 +1,13 @@
 import React from 'react'
+import {Card} from 'antd'
+import 'antd/dist/antd.css'
 
-export const BodyContent = ({data}) => {
+export const BodyContent = ({}) => {
   return (
-    <div>
+    <section>
+      <Card style={{ margin:10}}>
         Body Contents are displayed heere, as of now not displayed but i got the data in console
-    </div>
+      </Card>
+    </section>
   )
 }
